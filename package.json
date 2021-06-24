@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Whack a mole game. Made by Canet with VanillaJS, Webpack, Typescript and Sass",
   "author": "Canet",
-  "license": "ISC",
+  "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development webpack serve",
-    "start": "webpack serve --open",
+    "start": "webpack serve",
     "build": "cross-env NODE_ENV=production webpack"
   },
   "dependencies": {},
@@ -17,6 +17,7 @@
     "@babel/preset-env": "^7.14.7",
     "autoprefixer": "^10.2.6",
     "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
     "core-js": "3",
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.6",
