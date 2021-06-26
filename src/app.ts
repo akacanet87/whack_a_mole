@@ -5,7 +5,8 @@ interface Mole {
   isFake: boolean,
 }
 
-let gameTime = 60
+let gameTime = 10
+let gameScore = 0
 let timeHandler
 let moleHandler
 let x = Math.floor(Math.random() * 4) + 2
@@ -18,6 +19,42 @@ console.log('x', x)
 console.log('y', y)
 console.log('holeTotal', holeTotal)
 console.log('holeArray', holeArray)
+
+const getRandomNumber = (length: number) => {
+  return Math.floor(Math.random() * length)
+}
+
+const createRandomIndexList = (arrayLength: number, limit: number) => {
+  let randomArray = [] as number[]
+  while (randomArray.length < limit) {
+    let randomNumber = getRandomNumber(arrayLength)
+    if (randomArray.indexOf(randomNumber) < 0) {
+      randomArray.push(randomNumber)
+    }
+  }
+  return randomArray
+}
+
+const popMoles = () => {
+  let randomPointList = createRandomIndexList(holeTotal, moleLimit)
+  console.log('randomPointList', randomPointList, gameTime)
+  let fakeMoleIndex = Math.floor(Math.random() * randomPointList.length * 2)
+  let moleList = document.querySelectorAll('.mole')
+  console.log('moleList', moleList)
+  moleList.forEach((mole, index) => {
+    if (randomPointList.indexOf(index) >= 0) {
+      mole.classList.add('active')
+      if (fakeMoleIndex === index) {
+        mole.classList.add('fake')
+      }
+
+      setTimeout(() => {
+        mole.classList.remove('active')
+        mole.classList.remove('fake')
+      }, 2000)
+    }
+  })
+}
 
 const initGame = () => {
   console.log('createMoleList')
@@ -39,6 +76,29 @@ const initGame = () => {
 
     moleBox.appendChild(moleItem)
   }
+
+  let moleList = document.querySelectorAll('.mole')
+  moleList.forEach((mole, index) => {
+    mole.addEventListener('click', (e: HTMLElement & MouseEvent) => {
+      gameScore++
+      mole.classList.remove('active')
+    }, true)
+  })
+
+  timeHandler = setInterval(() => {
+    gameTime -= 1
+    if (gameTime <= -1) {
+      timeHandler = null
+    }
+  }, 1000)
+
+  moleHandler = setInterval(() => {
+    if (gameTime <= -1) {
+      moleHandler = null
+    } else {
+      popMoles()
+    }
+  }, 3000)
 }
 
 initGame()
