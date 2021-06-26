@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
   target: process.env.NODE_ENV === 'development' ? 'web' : 'browserslist',
-  entry: './src/scripts/index.ts',
+  entry: ['@babel/polyfill', './src/app.ts', './src/assets/styles/common.scss'],
   output: {
     path: path.join(__dirname, '/dist'),
     filename: '[name].[chunkhash].js',
@@ -17,7 +17,10 @@ module.exports = {
         exclude: /node_module/,
         use: {
           loader: 'babel-loader',
-        },
+          options: {
+            presets: ['@babel/preset-env'],
+          }
+        }
       },
       {
         test: /\.ts$/,
@@ -28,27 +31,30 @@ module.exports = {
       },
       {
         test: /\.(sass|scss|css)$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+      },
+      {
+        test: /\.(png|svg|jpe?g|gif)$/,
+        exclude: /fonts/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          {
-            loader: 'css-loader',
+            loader: 'file-loader',
             options: {
-              modules: false,
-              sourceMap: true,
+              name: '[name].[ext]',
+              outputPath: '/assets/images',
             },
           },
+        ],
+      },
+      {
+        test: /\.(svg|eot|woff|woff2|ttf)$/,
+        exclude: /images/,
+        use: [
           {
-            loader: 'postcss-loader',
+            loader: 'file-loader',
             options: {
-              sourceMap: true,
-            },
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true,
+              name: '[name].[ext]',
+              outputPath: '/assets/fonts',
             },
           },
         ],
@@ -63,11 +69,14 @@ module.exports = {
     extensions: [
       '.ts',
       '.js',
+      '.css',
+      '.scss',
+      '.json',
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/pages/index.html',
+      template: './src/index.html',
     }),
     new CleanWebpackPlugin(),
   ],
