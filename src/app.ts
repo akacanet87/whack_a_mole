@@ -1,10 +1,5 @@
 console.log('index.ts 다')
 
-interface Mole {
-  isPop: boolean,
-  isFake: boolean,
-}
-
 let gameTime = 10
 let gameScore = 0
 let timeHandler
@@ -50,7 +45,11 @@ const popMoles = () => {
 
       setTimeout(() => {
         mole.classList.remove('active')
-        mole.classList.remove('fake')
+
+        setTimeout(() => {
+          mole.classList.remove('fake')
+          mole.classList.remove('hit')
+        }, 1000)
       }, 2000)
     }
   })
@@ -80,8 +79,18 @@ const initGame = () => {
   let moleList = document.querySelectorAll('.mole')
   moleList.forEach((mole, index) => {
     mole.addEventListener('click', (e: HTMLElement & MouseEvent) => {
-      gameScore++
-      mole.classList.remove('active')
+      if (mole.className.indexOf('active') >= 0) {
+        if (mole.className.indexOf('fake') >= 0) {
+          if (gameScore > 0) {
+            gameScore--
+          }
+        } else {
+          gameScore++
+        }
+        mole.classList.add('hit')
+        mole.classList.remove('active')
+      }
+      console.log('gameScore', gameScore)
     }, true)
   })
 
