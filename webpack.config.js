@@ -5,7 +5,12 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
   target: process.env.NODE_ENV === 'development' ? 'web' : 'browserslist',
-  entry: ['@babel/polyfill', './src/app.ts', './src/assets/styles/common.scss'],
+  entry: [
+    '@babel/polyfill',
+    './src/app.ts',
+    './src/router/index.ts',
+    './src/assets/styles/common.scss',
+  ],
   output: {
     path: path.join(__dirname, '/dist'),
     filename: '[name].[chunkhash].js',
@@ -19,8 +24,8 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env'],
-          }
-        }
+          },
+        },
       },
       {
         test: /\.ts$/,
@@ -31,7 +36,12 @@ module.exports = {
       },
       {
         test: /\.(sass|scss|css)$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
+        ],
       },
       {
         test: /\.(png|svg|jpe?g|gif)$/,
@@ -86,6 +96,7 @@ module.exports = {
     host: 'localhost',
     port: 8000,
     hot: true,
+    historyApiFallback: true,
   },
   mode: 'development',
 }

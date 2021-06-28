@@ -15,7 +15,7 @@
   color: $color-11;
   font-size: 14px;
   letter-spacing: -0.02em;
-  line-height: 1;
+  line-height: 1.34;
   scrollbar-3dlight-color: $color-trans;
   scrollbar-darkshadow-color: $color-trans;
   scrollbar-arrow-color: $color-trans;
@@ -162,64 +162,327 @@ fieldset {
 section {
   width: 100%;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.mole-box {
-  width: 100%;
-  max-width: 480px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  cursor: url(../images/hammer.png) 22 42, auto;
+  .container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 12px 36px 12px;
+    max-width: $layout-xl;
 
-  .mole-item {
-    position: relative;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
+    &.main {
+      padding-top: 36px;
 
-    &:after {
-      content: '';
-      width: 100%;
-      height: 20%;
-      position: absolute;
-      bottom: -6px;
-      background-image: url(../images/hole.png);
-      background-repeat: no-repeat;
-      background-size: contain;
-      background-position: bottom;
-      z-index: 1;
-    }
-
-    .mole {
-      background-image: url(../images/mole.png);
-      background-size: 50%;
-      position: absolute;
-      top: calc( 100% + 16px);
-      width: 100%;
-      height: 100%;
-      transition: top 0.8s;
-
-      &.hit {
-        background-image: url(../images/mole-hit.png);
-      }
-
-      &.fake {
-        background-image: url(../images/fake-mole.png);
-
-        &.hit {
-          background-image: url(../images/fake-mole-hit.png);
+      @keyframes title-change {
+        0% {
+          color: $color-secondary;
+        }
+        20% {
+          color: $color-primary;
+        }
+        40% {
+          color: #8ED240;
+        }
+        60% {
+          color: #11A2E3;
+        }
+        80% {
+          color: #A444B5;
+        }
+        100% {
+          color: $color-secondary;
         }
       }
 
-      &.active {
-        top: 36px;
-        transition: top 0.8s;
+      h2 {
+        text-align: center;
+        font-size: 32px;
+        font-weight: 700;
+        animation: title-change 2s infinite;
       }
+
+      h3 {
+        margin-top: 18px;
+        text-align: center;
+        font-size: 18px;
+      }
+
+      .input-line {
+        width: 100%;
+        max-width: $layout-sm;
+        margin: 12px auto 0 auto;
+        display: flex;
+        align-items: center;
+
+        &:first-child {
+          margin-top: 16px;
+        }
+
+        label {
+          width: 96px;
+          font-size: 16px;
+        }
+
+        input {
+          width: calc( 100% - 96px );
+          height: 44px;
+          padding-left: 12px;
+          border-radius: 4px;
+          border: 1px solid $color-11;
+        }
+      }
+
+      .info-line {
+        width: 100%;
+        max-width: $layout-sm;
+        margin: 12px auto 0 auto;
+        padding-left: 108px;
+        color: #FF5500;
+      }
+
+      .info-box {
+        width: 100%;
+        max-width: $layout-sm;
+        margin: 24px auto 0 auto;
+
+        .game-info {
+          width: 100%;
+          display: flex;
+          align-items: flex-start;
+
+          .mole {
+            width: 50%;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            img {
+              width: 144px;
+            }
+            h3 {
+              width: 100%;
+              margin-top: 12px;
+              font-size: 18px;
+              font-weight: 700;
+            }
+            p {
+              width: 100%;
+              margin-top: 8px;
+              font-size: 16px;
+            }
+
+            &.fake {
+
+              h3 {
+                color: $color-secondary;
+              }
+              p {
+                color: $color-secondary;
+              }
+            }
+          }
+        }
+
+        .rule-info {
+          margin-top: 16px;
+
+          ul {
+            padding-left: 28px;
+            list-style: lower-roman;
+
+            li {
+              font-size: 16px;
+            }
+            li + li {
+              margin-top: 8px;
+            }
+          }
+        }
+      }
+
+      .button-box {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        h3 {
+          font-size: 18px;
+        }
+
+        button {
+          width: 100%;
+          height: 44px;
+          max-width: 360px;
+          margin-top: 12px;
+          border-radius: 4px;
+          background-color: $color-primary;
+          font-weight: bold;
+        }
+      }
+    }
+
+    &.game {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .mole-box {
+        width: 100%;
+        max-width: 480px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        cursor: url(../images/hammer.png) 22 42, auto;
+
+        .mole-item {
+          position: relative;
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+
+          &:after {
+            content: '';
+            width: 100%;
+            height: 20%;
+            position: absolute;
+            bottom: -6px;
+            background-image: url(../images/hole.png);
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: bottom;
+            z-index: 1;
+          }
+
+          .mole {
+            background-image: url(../images/mole.png);
+            background-size: 50%;
+            position: absolute;
+            top: calc(100% + 16px);
+            width: 100%;
+            height: 100%;
+            transition: top 0.8s;
+
+            &.hit {
+              background-image: url(../images/mole-hit.png);
+            }
+
+            &.fake {
+              background-image: url(../images/fake-mole.png);
+
+              &.hit {
+                background-image: url(../images/fake-mole-hit.png);
+              }
+            }
+
+            &.active {
+              top: 36px;
+              transition: top 0.8s;
+            }
+          }
+        }
+      }
+    }
+
+    &.result {
+      padding-top: 48px;
+
+      .result-box {
+        width: 100%;
+        max-width: $layout-sm;
+        margin: 0 auto;
+
+        h2 {
+          text-align: center;
+          font-size: 32px;
+          font-weight: 700;
+        }
+        h3 {
+          margin-top: 12px;
+          text-align: center;
+          font-size: 18px;
+          font-weight: 700;
+        }
+        p {
+          margin-top: 16px;
+          text-align: center;
+          font-size: 16px;
+        }
+      }
+
+      .button-box {
+        width: 100%;
+        max-width: $layout-sm;
+        margin: 24px auto 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        button {
+          width: 160px;
+          height: 44px;
+          border-radius: 4px;
+          font-weight: bold;
+
+          &.restart {
+            background-color: $color-primary;
+          }
+          &.stop {
+            background-color: $color-secondary;
+          }
+        }
+        button + button {
+          margin-left: 12px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $layout-xl) {
+  section {
+
+    .container {
+      max-width: $layout-lg;
+    }
+  }
+}
+
+@media (max-width: $layout-lg) {
+  section {
+
+    .container {
+      max-width: $layout-md;
+    }
+  }
+}
+
+@media (max-width: $layout-md) {
+  section {
+
+    .container {
+      max-width: $layout-sm;
+    }
+  }
+}
+
+@media (max-width: $layout-sm) {
+  section {
+
+    .container {
+      max-width: $layout-xs;
+    }
+  }
+}
+
+@media (max-width: $layout-xs) {
+  section {
+
+    .container {
+      max-width: none;
     }
   }
 }
