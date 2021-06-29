@@ -2,6 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
   target: process.env.NODE_ENV === 'development' ? 'web' : 'browserslist',
@@ -9,11 +10,39 @@ module.exports = {
     '@babel/polyfill',
     './src/app.ts',
     './src/router/index.ts',
+    './src/store/index.ts',
     './src/assets/styles/common.scss',
   ],
   output: {
     path: path.join(__dirname, '/dist'),
     filename: '[name].[chunkhash].js',
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        minify: (file, sourceMap) => {
+          const uglifyJsOptions = {}
+
+          if (sourceMap) {
+            uglifyJsOptions.sourceMap = {
+              content: sourceMap,
+            }
+          }
+
+          return require('uglify-js').minify(file, uglifyJsOptions)
+        },
+        terserOptions: {
+          format: {
+            comments: false,
+          },
+          compress: {
+            drop_console: true,
+          },
+        },
+        extractComments: false,
+      }),
+    ],
   },
   module: {
     rules: [
@@ -23,7 +52,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env'],
+            presets: ['@babel/preset-env', '@babel/preset-typescript'],
           },
         },
       },
