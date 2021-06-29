@@ -1,36 +1,27 @@
-import Router from 'vanilla-router'
+import router from './router'
 import Home from './views/Home'
 import Game from './views/Game'
 import Result from './views/Result'
+import { initHome } from './scripts/home'
 import { initGame } from './scripts/game'
+import { initResult } from './scripts/result'
 
-//App area
-const App = document.getElementById('root')
-
-let router = new Router({
-  mode: 'history',
-  hooks: {
-    before: function (newPage) {
-      console.info('Before page loads hook', newPage);
-    }
-  },
-  page404: function(path) {
-    console.log('"/' + path + '" Page not found')
-  },
-})
+const RootDom = document.getElementById('root')
 
 router.add('', function() {
   console.log('Home page-----------------------')
-  App.innerHTML = Home
+  RootDom.innerHTML = Home
+  initHome()
 })
 .add('game', function() {
   console.log('Game page-----------------------')
-  App.innerHTML = Game
+  RootDom.innerHTML = Game
   initGame()
 })
 .add('result', function() {
   console.log('Result page-----------------------')
-  App.innerHTML = Result
+  RootDom.innerHTML = Result
+  initResult()
 })
 
 router.addUriListener()

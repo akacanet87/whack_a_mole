@@ -1,71 +1,32 @@
-let gameTime = 10
-let gameScore = 0
-let x = Math.floor(Math.random() * 4) + 2
-let y = Math.floor(Math.random() * 4) + 2
-let moleLimit = 4
-let holeTotal = x * y
+import { createRandomIndexList } from './utils'
+import store from '../store'
+import router from '../router'
+
+let gameTime: number
+let gameTimeHandler: NodeJS.Timeout = null
+let molePopTimeHandler: NodeJS.Timeout = null
 let moleList: NodeListOf<HTMLElement>
+let totalHoles: number
+let moleLimit: number
+let isPaused: boolean
 
-console.log('x', x)
-console.log('y', y)
-console.log('holeTotal', holeTotal)
-
-const getRandomNumber = (length: number) => {
-  return Math.floor(Math.random() * length)
-}
-
-const createRandomIndexList = (arrayLength: number, limit: number) => {
-  let randomArray = [] as number[]
-  while (randomArray.length < limit) {
-    let randomNumber = getRandomNumber(arrayLength)
-    if (randomArray.indexOf(randomNumber) < 0) {
-      randomArray.push(randomNumber)
-    }
-  }
-  return randomArray
-}
-
-const popMoles = () => {
-  let randomPointList = createRandomIndexList(holeTotal, moleLimit)
-  let fakeMoleIndex = Math.floor(Math.random() * randomPointList.length * 2)
-  moleList.forEach((mole, index) => {
-    if (randomPointList.indexOf(index) >= 0) {
-      mole.classList.add('active')
-      if (fakeMoleIndex === index) {
-        mole.classList.add('fake')
-      }
-
-      setTimeout(() => {
-        mole.classList.remove('active')
-
-        setTimeout(() => {
-          mole.classList.remove('fake')
-          mole.classList.remove('hit')
-        }, 1000)
-      }, 2000)
-    }
-  })
-}
-
-const onGameEnd = () => {
-
-}
-
-export const initGame = () => {
-  console.log('createMoleList')
-  let timeHandler: NodeJS.Timeout = null
-  let moleHandler: NodeJS.Timeout = null
-
-  let width = window.innerWidth > 480 ? 480 / x - 8 : window.innerWidth / x - 8
-  let height = window.innerHeight / y - 8
+const createMoles = (xAxis: number, yAxis: number, totalHoles: number) => {
+  let width = window.innerWidth > 480 ? 480 / xAxis - 8 : window.innerWidth / xAxis - 8
+  let height = (window.innerHeight - 136) / yAxis - 8
   let holeSize = width > height ? height : width
   const moleBox = document.getElementById('moleBox')
 
-  for (let i = 0; i < holeTotal; i++) {
+  let containerWidth = window.innerWidth > 480 ? 480 : window.innerWidth
+  let padding = (containerWidth - ((holeSize + 16) * xAxis )) / 2
+  moleBox.innerHTML = ``
+  moleBox.style.paddingLeft = `${padding}px`
+  moleBox.style.paddingRight = `${padding}px`
+
+  for (let i = 0; i < totalHoles; i++) {
     const moleItem = document.createElement('div')
     moleItem.className = `mole-item`
-    moleItem.style.width = holeSize + 'px'
-    moleItem.style.height = holeSize + 'px'
+    moleItem.style.width = `${holeSize}px`
+    moleItem.style.height = `${holeSize}px`
     moleItem.style.padding = '4px'
     moleItem.style.padding = '4px'
     moleItem.innerHTML = `
@@ -74,41 +35,143 @@ export const initGame = () => {
 
     moleBox.appendChild(moleItem)
   }
+}
 
+const registerMoleEvent = () => {
   moleList = document.querySelectorAll('.mole')
   moleList.forEach((mole, index) => {
     mole.addEventListener('click', (e: HTMLElement & MouseEvent) => {
+      let gameScore = store.getters('GAME_SCORE')
       if (mole.className.indexOf('active') >= 0) {
-        if (mole.className.indexOf('fake') >= 0) {
-          if (gameScore > 0) {
-            gameScore--
-          }
+        if (mole.className.indexOf('fake') >= 0 && gameScore > 0) {
+          gameScore -= 1
         } else {
-          gameScore++
+          gameScore += 1
         }
-        mole.classList.add('hit')
-        mole.classList.remove('active')
       }
-      console.log('gameScore', gameScore)
+      const scoreBoard = document.getElementById('scoreBoard')
+      scoreBoard.innerHTML = gameScore.toString()
+      store.dispatch('GAME_SCORE', gameScore)
+      mole.classList.add('hit')
+      mole.classList.remove('active')
     }, true)
   })
+}
 
-  timeHandler = setInterval(() => {
+const popMoles = (popTime: number) => {
+  console.log('popMoles')
+  let randomPointList = createRandomIndexList(totalHoles, moleLimit)
+  let fakeMoleIndex = Math.floor(Math.random() * randomPointList.length * 2)
+
+  moleList.forEach((mole, index) => {
+    if (randomPointList.indexOf(index) >= 0) {
+      if (fakeMoleIndex === index) {
+        mole.classList.add('fake')
+      }
+      mole.classList.add('active')
+
+      setTimeout(() => {
+        mole.classList.remove('active')
+
+        setTimeout(() => {
+          mole.classList.remove('fake')
+          mole.classList.remove('hit')
+        }, 800)
+      }, popTime)
+    }
+  })
+}
+
+const gameTimeInterval = () => {
+  gameTimeHandler = setInterval(() => {
     gameTime -= 1
     console.log('gameTime', gameTime)
-    if (gameTime <= -1) {
-      clearInterval(timeHandler)
-      timeHandler = null
+    if (gameTime <= 0) {
+      clearInterval(gameTimeHandler)
+      gameTimeHandler = null
     }
+    const timeBoard = document.getElementById('timeBoard')
+    timeBoard.innerHTML = gameTime.toString()
   }, 1000)
+}
 
-  moleHandler = setInterval(() => {
-    if (gameTime <= -1) {
-      clearInterval(moleHandler)
-      moleHandler = null
-      onGameEnd()
+const molePopTimeInterval = () => {
+  molePopTimeHandler = setInterval(() => {
+    if (gameTime <= 0) {
+      clearInterval(molePopTimeHandler)
+      molePopTimeHandler = null
+      onTimeEnd()
     } else {
-      popMoles()
+      let popTime = gameTime > 40 ? 2000 : gameTime > 20 ? 1600 : 1200
+      popMoles(popTime)
     }
   }, 3000)
+}
+
+export const onPauseGame = () => {
+  const pauseButton = document.getElementById('pauseButton')
+  if (isPaused) {
+    gameTimeInterval()
+    molePopTimeInterval()
+    pauseButton.innerText = '일시정지'
+  } else {
+    clearInterval(gameTimeHandler)
+    clearInterval(molePopTimeHandler)
+    pauseButton.innerText = '재개하기'
+  }
+  isPaused = !isPaused
+}
+
+const onStopGame = () => {
+  if (confirm('정말 게임을 그만하시겠습니까?')) {
+    clearGame()
+    router.navigateTo('/')
+  }
+}
+
+const onTimeEnd = () => {
+  router.navigateTo('/result')
+}
+
+export const clearGame = () => {
+  clearInterval(gameTimeHandler)
+  clearInterval(molePopTimeHandler)
+  store.dispatch('GAME_TIME', 60)
+  store.dispatch('GAME_SCORE', 0)
+}
+
+export const initGame = () => {
+  store.dispatch('GAME_TIME', 60)
+  store.dispatch('GAME_SCORE', 0)
+
+  let xAxis = store.getters('X_AXIS')
+  let yAxis = store.getters('Y_AXIS')
+  totalHoles = store.getters('TOTAL_HOLES')
+  moleLimit = store.getters('MOLE_LIMIT')
+  gameTime = 60
+  isPaused = false
+
+  const pauseButton = document.getElementById('pauseButton')
+  pauseButton.addEventListener('click', () => {
+    onPauseGame()
+  }, true)
+  const stopButton = document.getElementById('stopButton')
+  stopButton.addEventListener('click', () => {
+    onStopGame()
+  }, true)
+  const timeBoard = document.getElementById('timeBoard')
+  timeBoard.innerHTML = gameTime.toString()
+  const scoreBoard = document.getElementById('scoreBoard')
+  scoreBoard.innerHTML = '0'
+
+  if (xAxis < 2 || yAxis < 2 || totalHoles < 4) {
+    router.navigateTo('/')
+    return
+  }
+
+  createMoles(xAxis, yAxis, totalHoles)
+  registerMoleEvent()
+
+  gameTimeInterval()
+  molePopTimeInterval()
 }
