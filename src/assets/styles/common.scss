@@ -1,0 +1,679 @@
+@import "variables";
+@import "mixins";
+
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: $Roboto;
+  -webkit-font-smoothing: antialiased;;
+  -webkit-overflow-scrolling: touch;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  color: $color-11;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  line-height: 1.34;
+  scrollbar-3dlight-color: $color-trans;
+  scrollbar-darkshadow-color: $color-trans;
+  scrollbar-arrow-color: $color-trans;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  @include placeholder {
+    color: $color-99;
+    letter-spacing: normal;
+  }
+
+  * {
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+  }
+}
+
+html {
+  width: 100%;
+  height: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  background-image: url(../images/field.png);
+  background-position: center;
+  background-size: cover;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+
+  * {
+    cursor: pointer;
+  }
+}
+
+input[type=date] {
+  -webkit-appearance: none;
+}
+
+::-webkit-inner-spin-button,
+::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-size: 12px;
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+select option {
+  font-weight: normal;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: $color-white;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active {
+  -webkit-animation: autofill 0s forwards;
+  animation: autofill 0s forwards;
+}
+
+@keyframes autofill {
+  100% {
+    background: transparent;
+    color: inherit;
+  }
+}
+
+@-webkit-keyframes autofill {
+  100% {
+    background: transparent;
+    color: inherit;
+  }
+}
+
+input,
+textarea {
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+textarea {
+  resize: none;
+  outline: none;
+}
+
+button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+
+  a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+fieldset {
+  padding: 0;
+  margin: 0;
+  border: none;
+  text-align: left;
+}
+
+@keyframes color-change {
+  0% {
+    color: #E0331C;
+  }
+  20% {
+    color: #e9640b;
+  }
+  40% {
+    color: #40b526;
+  }
+  60% {
+    color: #156cae;
+  }
+  80% {
+    color: #A444B5;
+  }
+  100% {
+    color: $color-secondary;
+  }
+}
+
+@keyframes change-mole {
+  0%, 100% {
+    background-image: url(../images/mole.png)
+  }
+  50% {
+    background-image: url(../images/mole-hit.png)
+  }
+}
+@keyframes change-fake-mole {
+  0%, 100% {
+    background-image: url(../images/fake-mole.png)
+  }
+  50% {
+    background-image: url(../images/fake-mole-hit.png)
+  }
+}
+
+section {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+
+  @media (max-width: $layout-sm) {
+    .side-text {
+      top: -1000px;
+    }
+  }
+
+  @keyframes side-text {
+    0%, 100% {
+      left: 0;
+      right: unset;
+    }
+    50% {
+      left: unset;
+      right: 0;
+    }
+  }
+
+  .side-text {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 60px;
+    font-weight: bold;
+    z-index: 10;
+  }
+
+  .container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 12px 36px 12px;
+    max-width: $layout-xl;
+
+    &.main {
+      padding: 0;
+      position: relative;
+
+      .info-area {
+        padding: 60px 30px 84px 30px;
+        background-image: url(../images/game-board.png);
+        background-size: 100% 100%;
+
+        h2 {
+          text-align: center;
+          font-size: 32px;
+          font-weight: 700;
+          animation: color-change 1.2s infinite;
+        }
+
+        h3 {
+          margin-top: 18px;
+          text-align: center;
+          font-size: 18px;
+          animation: color-change 2s infinite;
+        }
+
+        .input-box {
+          width: 100%;
+          max-width: $layout-sm;
+          margin: 12px auto 0 auto;
+          display: flex;
+          align-items: center;
+
+          &:first-child {
+            margin-top: 16px;
+          }
+
+          label {
+            width: 96px;
+            font-size: 16px;
+          }
+
+          input {
+            width: calc(100% - 96px);
+            height: 44px;
+            padding-left: 12px;
+            border-radius: 4px;
+            border: 1px solid $color-11;
+          }
+        }
+
+        .info-text {
+          width: 100%;
+          max-width: $layout-sm;
+          margin: 12px auto 0 auto;
+          padding-left: 108px;
+          color: #FF5500;
+        }
+
+        .info-box {
+          width: 100%;
+          max-width: $layout-sm;
+          margin: 24px auto 0 auto;
+
+          .game-info {
+            width: 100%;
+            display: flex;
+            align-items: flex-start;
+
+            .mole {
+              width: 50%;
+              padding: 0 12px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex-direction: column;
+
+              .mole-image {
+                width: 144px;
+                height: 240px;
+                max-height: 240px;
+                animation: change-mole 2s infinite;
+                background-size: contain;
+
+                &.fake {
+                  animation: change-fake-mole 2s infinite;
+                }
+              }
+
+              h3 {
+                width: 100%;
+                margin-top: 12px;
+                font-size: 18px;
+                font-weight: 700;
+              }
+
+              p {
+                width: 100%;
+                margin-top: 8px;
+                font-size: 16px;
+              }
+
+              &.fake {
+
+                h3 {
+                  color: $color-secondary;
+                }
+
+                p {
+                  color: $color-secondary;
+                }
+              }
+            }
+          }
+
+          .rule-info {
+            margin-top: 16px;
+
+            ul {
+              padding-left: 28px;
+              list-style: lower-roman;
+
+              li {
+                font-size: 16px;
+              }
+
+              li + li {
+                margin-top: 8px;
+              }
+            }
+          }
+        }
+
+        .button-box {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+
+          h3 {
+            font-size: 18px;
+          }
+
+          button {
+            width: 100%;
+            height: 44px;
+            max-width: 360px;
+            margin-top: 12px;
+            border-radius: 4px;
+            background-color: $color-primary;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    &.game {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      position: relative;
+
+      .board-box {
+        width: 360px;
+        height: 120px;
+        margin-top: 24px;
+        padding-top: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background-image: url(../images/score-board.png);
+        background-size: 100% 100%;
+        background-position: center;
+
+        .score-line {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          dl {
+            width: 144px;
+            display: flex;
+            align-items: center;
+
+            dt {
+              width: 96px;
+              font-size: 20px;
+              font-weight: bold;
+              text-align: center;
+              animation: color-change 2s infinite;
+            }
+
+            dd {
+              width: 48px;
+              margin-left: 8px;
+              font-size: 20px;
+              font-weight: bold;
+              text-align: center;
+              animation: color-change 2s infinite;
+            }
+          }
+
+          dl + dl {
+            margin-left: 12px;
+          }
+        }
+
+        .button-line {
+          margin: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          button {
+            width: 120px;
+            height: 40px;
+            border-radius: 4px;
+            font-weight: bold;
+
+            &.pause {
+              background-color: $color-primary;
+            }
+
+            &.stop {
+              background-color: $color-secondary;
+            }
+          }
+
+          button + button {
+            margin-left: 12px;
+          }
+        }
+      }
+
+      .mole-box {
+        width: 100%;
+        bottom: 0;
+        max-width: 480px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        cursor: url(../images/hammer.png) 22 42, auto;
+
+        .mole-item {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          overflow: hidden;
+
+          &:after {
+            content: '';
+            width: 100%;
+            height: 20%;
+            position: absolute;
+            bottom: -6%;
+            background-image: url(../images/hole.png);
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: bottom;
+            z-index: 1;
+          }
+
+          .mole {
+            background-image: url(../images/mole.png);
+            background-size: 50%;
+            position: absolute;
+            top: 106%;
+            width: 100%;
+            height: 100%;
+            transition: top 0.8s;
+
+            &.hit {
+              background-image: url(../images/mole-hit.png);
+            }
+
+            &.fake {
+              background-image: url(../images/fake-mole.png);
+
+              &.hit {
+                background-image: url(../images/fake-mole-hit.png);
+              }
+            }
+
+            &.active {
+              top: 15%;
+              transition: top 0.8s;
+            }
+          }
+        }
+      }
+    }
+
+    &.result {
+      padding-top: 48px;
+
+      .result-box {
+        width: 100%;
+        max-width: $layout-sm;
+        margin: 0 auto;
+        padding: 24px;
+        background-image: url(../images/score-board.png);
+
+        h2 {
+          margin-top: 12px;
+          text-align: center;
+          font-size: 32px;
+          font-weight: 700;
+          animation: color-change 0.8s infinite;
+        }
+
+        h3 {
+          text-align: center;
+          font-size: 18px;
+          font-weight: 700;
+          animation: color-change 1.2s infinite;
+        }
+
+        p {
+          margin-top: 16px;
+          text-align: center;
+          font-size: 16px;
+          animation: color-change 1.6s infinite;
+        }
+      }
+
+      .button-box {
+        width: 100%;
+        max-width: $layout-sm;
+        margin: 24px auto 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        button {
+          width: 160px;
+          height: 44px;
+          border-radius: 4px;
+          font-weight: bold;
+
+          &.restart {
+            background-color: $color-primary;
+          }
+
+          &.stop {
+            background-color: $color-secondary;
+          }
+        }
+
+        button + button {
+          margin-left: 12px;
+        }
+      }
+
+      .fun-box {
+        margin-top: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        @keyframes change-mole {
+          0%, 100% {
+            background-image: url(../images/mole.png);
+          }
+          50% {
+            background-image: url(../images/mole-hit.png);
+          }
+        }
+        @keyframes change-fake-mole {
+          0%, 100% {
+            background-image: url(../images/fake-mole.png);
+          }
+          50% {
+            background-image: url(../images/fake-mole-hit.png);
+          }
+        }
+
+        .mole {
+          width: 50%;
+          height: 240px;
+          animation: change-mole 2s infinite;
+          background-size: contain;
+
+          &.fake {
+            animation: change-fake-mole 2s infinite;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $layout-xl) {
+  section {
+
+    .container {
+      max-width: $layout-lg;
+    }
+  }
+}
+
+@media (max-width: $layout-lg) {
+  section {
+
+    .container {
+      max-width: $layout-md;
+    }
+  }
+}
+
+@media (max-width: $layout-md) {
+  section {
+
+    .container {
+      max-width: $layout-sm;
+    }
+  }
+}
+
+@media (max-width: $layout-sm) {
+  section {
+
+    .container {
+      max-width: $layout-xs;
+    }
+  }
+}
+
+@media (max-width: $layout-xs) {
+  section {
+
+    .container {
+      max-width: none;
+    }
+  }
+}
