@@ -203,6 +203,34 @@ fieldset {
 section {
   width: 100%;
   min-height: 100vh;
+  position: relative;
+
+  @media (max-width: $layout-sm) {
+    .side-text {
+      top: -1000px;
+    }
+  }
+
+  @keyframes side-text {
+    0%, 100% {
+      left: 0;
+      right: unset;
+    }
+    50% {
+      left: unset;
+      right: 0;
+    }
+  }
+
+  .side-text {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 60px;
+    font-weight: bold;
+    z-index: 10;
+  }
 
   .container {
     width: 100%;

@@ -1,6 +1,9 @@
 import store from '../store'
 import router from '../router'
 
+/**
+ * 시작 버튼 이벤트 등록
+ */
 const registerStartButton = () => {
   const startButton = document.getElementById('startButton')
 
@@ -34,6 +37,9 @@ const registerStartButton = () => {
   })
 }
 
+/**
+ * / 페이지 initial 기능 구현부
+ */
 export const initHome = () => {
 
   const xAxisDom = document.getElementById('xAxis') as HTMLInputElement

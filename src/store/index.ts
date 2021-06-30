@@ -1,10 +1,10 @@
 interface State {
-  gameTime: number,
-  gameScore: number,
-  xAxis: number,
-  yAxis: number,
-  moleLimit: number,
-  totalHoles: number,
+  gameTime: number,     // 게임 잔여 시간
+  gameScore: number,    // 게임 점수
+  xAxis: number,        // 가로 구멍 수
+  yAxis: number,        // 세로 구멍 수
+  moleLimit: number,    // 출현 두더지 수
+  totalHoles: number,   // 총 구멍 수
 }
 
 interface Getters {

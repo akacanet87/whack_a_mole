@@ -1,5 +1,6 @@
 const GameDom = `
-<section>
+<section id="gameSection">
+  <div id="sideText" class="side-text"></div>
   <div class="game container">
     <div class="board-box">
       <div class="score-line">
@@ -25,7 +26,8 @@ const GameDom = `
         </button>
       </div>
     </div>
-    <div id="moleBox" class="mole-box"></div>
+    <div id="moleBox" class="mole-box">
+    </div>
   </div>
 </section>
 `
